@@ -11,7 +11,7 @@ const next = upcoming(events, new Date(), Astro.props.limit ?? 3);
 ---
 <ul class="events">
   {next.map(({ ev, at }) => (
-    <li class="event" data-reveal>
+    <li class="event" data-reveal data-start={ev.start} data-weekly={String(ev.weekly)}>
       <p class="label event-when"><time datetime={at.toISOString()} data-local>{formatLocal(at, 'Europe/Bucharest')}</time>{ev.weekly && <span> · în fiecare săptămână</span>}</p>
       <p class="h3">{ev.title}</p>
       <p class="event-sum">{ev.summary}</p>
@@ -26,13 +26,21 @@ const next = upcoming(events, new Date(), Astro.props.limit ?? 3);
   .event { display: grid; justify-items: center; gap: 10px; padding: 34px 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--card); text-align: center; }
   .event-when { color: var(--accent-ink); }
   .event-sum { max-width: 60ch; color: var(--muted); }
+  .event[hidden] { display: none; }
   .events-tz { margin-top: 18px !important; color: var(--muted); }
 </style>
 
 <script>
   import { onPage, $$ } from '../scripts/motion';
-  import { formatLocal } from '../lib/events';
+  import { nextOccurrence, formatLocal } from '../lib/events';
+  // the page is static: recompute each date now (a weekly meeting moves on, a past one disappears)
   onPage(() => {
-    $$<HTMLTimeElement>('time[data-local]').forEach((t) => (t.textContent = formatLocal(new Date(t.dateTime))));
+    $$<HTMLLIElement>('li[data-start]').forEach((li) => {
+      const at = nextOccurrence({ start: li.dataset.start!, weekly: li.dataset.weekly === 'true' }, new Date());
+      const t = li.querySelector('time')!;
+      if (!at) return void (li.hidden = true);
+      t.dateTime = at.toISOString();
+      t.textContent = formatLocal(at);
+    });
   });
 </script>
