@@ -15,12 +15,12 @@ const cur = (href: string) => (path === href || path.startsWith(href + '/') ? 'p
   </a>
   <div class="nav-side nav-right">
     <nav aria-label="Meniu, continuare">{right.map(([t, href]) => <a href={href} aria-current={cur(href)}>{t}</a>)}</nav>
-    <a class="btn btn-primary nav-cta" href={config.links.club}>Intră în club</a>
+    <a class="btn btn-primary nav-cta" href={config.links.club}>Urcă la bord</a>
   </div>
   <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Deschide meniul"><i></i><i></i></button>
   <div class="nav-menu" id="nav-menu" hidden>
     {[...left, ...right].map(([t, href]) => <a href={href} aria-current={cur(href)}>{t}</a>)}
-    <a class="btn btn-primary" href={config.links.club}>Intră în club</a>
+    <a class="btn btn-primary" href={config.links.club}>Urcă la bord</a>
   </div>
 </header>
 

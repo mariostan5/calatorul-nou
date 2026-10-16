@@ -12,9 +12,10 @@ test('the base layout: Romanian, brand fonts, light theme colour', () => {
   assert.match(html, /<meta name="theme-color" content="#FAFAF9"/);
 });
 
-test('the menu: the six pages and "Intră în club" into the platform', () => {
+test('the menu: the six pages and "Urcă la bord" into the platform', () => {
   const html = page();
-  assert.match(html, /href="https:\/\/calatorulantreprenor\.com\/club"[^>]*>[^<]*Intră în club/);
+  const right = html.match(/<div class="nav-side nav-right"[\s\S]*?<\/div>/)[0];
+  assert.match(right, /href="https:\/\/calatorulantreprenor\.com\/club"[^>]*>[^<]*Urcă la bord/);
   for (const p of ['/destinatii', '/travorium', '/excursii', '/calendar', '/academie', '/comunitate'])
     assert.match(html, new RegExp(`href="${p}"`), p);
 });
@@ -60,4 +61,12 @@ test('the Academie page carries the income note', () => {
 
 test('inner pages show no money amounts', () => {
   for (const p of Object.keys(PAGES)) assert.doesNotMatch(page(p).replace(/<script[\s\S]*?<\/script>/g, ''), MONEY, p);
+});
+
+test('hero: the name on two lines, a logo intro, nothing else', () => {
+  const hero = page().match(/<section class="hero"[\s\S]*?<\/section>/)[0];
+  assert.match(hero, /<h1[^>]*>[\s\S]*Călătorul[\s\S]*Antreprenor[\s\S]*<\/h1>/);
+  assert.match(hero, /class="intro"[^>]*hidden/);
+  assert.match(hero, /brand-logo\.webp/);
+  assert.doesNotMatch(hero, /Mergi cu noi|Clubul românilor care călătoresc|Urcă la bord/);
 });

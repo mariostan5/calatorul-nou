@@ -1,18 +1,33 @@
 ---
 /* The hero: you sit in the cabin, the wall and its porthole fill the screen, the clouds outside.
-   Scrolling holds the section while the words lift away and the wall grows around the glass until
-   you pass through it into the sky (src/scripts/hero.ts). Without JS or with reduced motion it stays put. */
+   First visit of a session: a short intro (the logo, a yellow ring drawing itself, then the dark opens
+   like an iris onto the porthole and the name writes itself out). Then scrolling takes you through the
+   glass (src/scripts/hero.ts). Without JS or with reduced motion: no intro, the name is simply there. */
 ---
-<section class="hero" data-hero aria-label="Bun venit">
+<section class="hero" data-hero aria-label="Călătorul Antreprenor">
   <img class="hero-sky" src="/hero/clouds.webp" alt="" width="1600" height="2400" fetchpriority="high" />
   <div class="hero-wall" aria-hidden="true"><img src="/hero/cabin-wall.webp" alt="" width="2208" height="920" fetchpriority="high" /></div>
   <div class="hero-copy wrap">
-    <p class="kicker label">Clubul românilor care călătoresc</p>
-    <h1 class="h1">Mergi cu noi <em>în vacanțe?</em></h1>
-    <p class="actions"><a class="btn btn-primary" href="#destinatii">Urcă la bord</a></p>
+    <h1 class="hero-name"><span class="hl-line">Călătorul</span><span class="hl-line">Antreprenor</span></h1>
   </div>
   <p class="hero-cue label" aria-hidden="true"><span>Derulează și treci prin hublou</span><i></i></p>
   <div class="hero-veil" aria-hidden="true"></div>
+  <div class="intro" hidden aria-hidden="true">
+    <div class="intro-mark">
+      <svg viewBox="0 0 100 100"><circle class="ring-a" cx="50" cy="50" r="48" pathLength="1" /><circle class="ring-b" cx="50" cy="50" r="44" pathLength="1" /></svg>
+      <img src="/brand-logo.webp" alt="" width="240" height="240" />
+    </div>
+  </div>
+  <script is:inline>
+    // decided before the first paint: play the intro once per visit, never with reduced motion
+    (function () {
+      var seen = false;
+      try { seen = sessionStorage.getItem('ca-intro') === '1'; } catch (e) {}
+      if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelector('.intro').hidden = false;
+      document.documentElement.classList.add('intro-playing');
+    })();
+  </script>
 </section>
 
 <style is:global>
@@ -24,21 +39,38 @@
   /* the image inside is what grows (GSAP would turn the box's CSS translate into fixed pixels) */
   .hero-wall img { width: 100%; height: 100%; transform-origin: 50.82% 50%; will-change: transform; }
   .hero-wall::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 75% at 50.8% 50%, transparent 55%, rgba(8, 28, 48, .45)); }
-  .hero-copy { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
-  .hero-copy .kicker { color: #fff; }
-  .hero-copy h1 { font-size: clamp(54px, 7.4vw, 132px); text-shadow: 0 4px 40px rgba(8, 28, 48, .55); }
+  .hero-copy { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  /* the name, on two lines, one under the other */
+  .hero-name { display: flex; flex-direction: column; align-items: center; font-size: clamp(56px, 8.4vw, 150px); font-weight: 700; line-height: .95; letter-spacing: .01em; text-transform: uppercase; text-shadow: 0 4px 40px rgba(8, 28, 48, .55); }
+  .hero-name .hl-line { display: block; }
   .hero-cue { position: absolute; z-index: 2; inset: auto 0 28px; display: grid; justify-items: center; gap: 12px; color: rgba(255, 255, 255, .85); }
   .hero-cue i { width: 1px; height: 46px; background: linear-gradient(#fff, transparent); animation: cue 2.2s var(--ease-inout) infinite; transform-origin: top; }
   @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
   .hero-veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(120% 90% at 50% 50%, #fff 30%, var(--bg) 70%); }
   .hero + * { position: relative; z-index: 1; }
+
+  /* ---------- the intro ---------- */
+  .intro { --r: 0px; position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; background: radial-gradient(circle at 50% 50%, #1B3D5C, #0B1A2A 70%);
+    /* a hole that opens from the middle, like an iris, onto the porthole */
+    -webkit-mask: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 2px)); mask: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 2px)); }
+  .intro[hidden] { display: none; }
+  .intro-mark { position: relative; width: clamp(120px, 12vw, 170px); aspect-ratio: 1; }
+  .intro-mark img { width: 100%; height: 100%; border-radius: 50%; }
+  .intro-mark svg { position: absolute; inset: -18%; width: 136%; height: 136%; overflow: visible; rotate: -90deg; }
+  .intro-mark circle { fill: none; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .ring-a { stroke: var(--accent); stroke-width: .8; }
+  .ring-b { stroke: rgba(255, 255, 255, .35); stroke-width: .4; }
+  /* while it plays, the name and the menu wait for their entrance */
+  .intro-playing .hero-name, .intro-playing .hero-cue, .intro-playing .nav { visibility: hidden; }
 </style>
 
 <script>
   import { onPage, $ } from '../../scripts/motion';
-  import { initHero } from '../../scripts/hero';
+  import { initHero, playIntro } from '../../scripts/hero';
   onPage(() => {
     const root = $('[data-hero]');
-    if (root) return initHero(root);
+    if (!root) return;
+    const stopIntro = playIntro(root), stopScroll = initHero(root);
+    return () => { stopIntro(); stopScroll(); };
   });
 </script>
