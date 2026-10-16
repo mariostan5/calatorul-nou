@@ -1,0 +1,42 @@
+---
+/* The hero: an open sky, the words in the middle and the porthole under them. Scrolling holds the
+   section in place while the words lift away and the porthole grows until you pass through its glass
+   into the clouds (src/scripts/hero.ts). Without JS or with reduced motion it simply stays as it is. */
+---
+<section class="hero" data-hero aria-label="Bun venit">
+  <video class="hero-sky" src="/hero/sky.mp4" poster="/hero/sky.webp" autoplay muted loop playsinline aria-hidden="true"></video>
+  <div class="hero-copy wrap stack">
+    <p class="kicker label">Clubul românilor care călătoresc</p>
+    <h1 class="h1">Lumea se vede altfel <em>de la hublou.</em></h1>
+    <p class="lead">Comunitatea românilor care călătoresc mai mult și construiesc, în paralel, ceva al lor.</p>
+    <p class="actions"><a class="btn btn-primary" href="#destinatii">Urcă la bord</a></p>
+  </div>
+  <div class="hero-port" aria-hidden="true"><img src="/hero/hublou-frame.webp" alt="" width="960" height="1200" fetchpriority="high" /></div>
+  <div class="hero-veil" aria-hidden="true"></div>
+</section>
+
+<style is:global>
+  .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; color: #fff; background: var(--sky-top); }
+  .hero-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* a little depth at the top so white words read on a bright sky */
+  .hero::before { content: ""; position: absolute; inset: 0 0 45%; z-index: 1; background: linear-gradient(rgba(16, 52, 96, .38), transparent); pointer-events: none; }
+  .hero-copy { position: relative; z-index: 2; padding-top: clamp(96px, 13vh, 132px); }
+  .hero-copy h1 { font-size: clamp(44px, 5.4vw, 92px); text-shadow: 0 2px 24px rgba(10, 45, 90, .28); }
+  .hero-copy > * + * { margin-top: 16px; }
+  .hero-copy .kicker { color: #fff; }
+  .hero-copy .lead { color: rgba(255, 255, 255, .92); text-shadow: 0 1px 12px rgba(10, 45, 90, .3); }
+  /* the porthole sits under the words; its glass is cut out, so the same sky shows through */
+  .hero-port { position: absolute; z-index: 1; left: 50%; bottom: -14vh; height: 58vh; aspect-ratio: 960 / 1200; translate: -50% 0; transform-origin: 50.7% 50.1%; will-change: transform; }
+  .hero-port img { width: 100%; height: 100%; }
+  .hero-veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(120% 90% at 50% 55%, #fff 30%, var(--bg) 70%); }
+  .hero + * { position: relative; z-index: 1; }
+</style>
+
+<script>
+  import { onPage, $ } from '../../scripts/motion';
+  import { initHero } from '../../scripts/hero';
+  onPage(() => {
+    const root = $('[data-hero]');
+    if (root) return initHero(root);
+  });
+</script>

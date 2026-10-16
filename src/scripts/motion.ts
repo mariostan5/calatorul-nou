@@ -77,4 +77,7 @@ export function initMotion() {
   onPage(reveals);
 }
 
+// dev only: lets the preview drive scroll-linked timelines by hand (the pane can be throttled)
+if (import.meta.env.DEV) Object.assign(window, { __ST: ScrollTrigger });
+
 export { gsap, ScrollTrigger, SplitText };
