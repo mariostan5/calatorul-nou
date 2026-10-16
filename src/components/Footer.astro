@@ -1,0 +1,29 @@
+---
+import { config } from '../config';
+
+const pages = [['Destinații', '/destinatii'], ['Travorium', '/travorium'], ['Excursii de grup', '/excursii'], ['Calendar', '/calendar'], ['Academie', '/academie'], ['Comunitate', '/comunitate']] as const;
+---
+<footer class="foot" id="contact">
+  <div class="wrap stack">
+    <img class="foot-logo" src="/brand-logo.webp" alt="Călătorul Antreprenor" width="240" height="240" />
+    <p class="lead">Comunitatea românilor din toată lumea care călătoresc mai mult și construiesc, în paralel, ceva al lor.</p>
+    <nav class="foot-links" aria-label="Subsol">{pages.map(([t, href]) => <a href={href}>{t}</a>)}</nav>
+    <p class="foot-contact">
+      <a href={`mailto:${config.email}`}>{config.email}</a>
+      <a href={config.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+      {Object.entries(config.social).map(([n, href]) => <a href={href} rel="noopener">{n}</a>)}
+    </p>
+    <a class="btn btn-primary" href={config.links.club}>Intră în club</a>
+    <p class="foot-copy label">© {new Date().getFullYear()} Călătorul Antreprenor</p>
+  </div>
+</footer>
+
+<style is:global>
+  .foot { padding-block: 96px 40px; border-top: 1px solid var(--line); background: var(--card); }
+  .foot-logo { width: 84px; height: 84px; margin-inline: auto; border-radius: 50%; }
+  .foot-links, .foot-contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; }
+  .foot-links a { font-family: var(--display); font-size: 20px; font-weight: 500; transition: color .3s; }
+  .foot-contact a { font-size: 14px; color: var(--muted); transition: color .3s; }
+  .foot-links a:hover, .foot-contact a:hover { color: var(--accent-ink); }
+  .foot-copy { color: var(--muted); padding-top: 24px; }
+</style>

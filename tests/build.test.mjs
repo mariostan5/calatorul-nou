@@ -11,3 +11,10 @@ test('the base layout: Romanian, brand fonts, light theme colour', () => {
   assert.match(html, /fonts\.googleapis\.com\/css2\?[^"]*Oswald/);
   assert.match(html, /<meta name="theme-color" content="#FAFAF9"/);
 });
+
+test('the menu: the six pages and "Intră în club" into the platform', () => {
+  const html = page();
+  assert.match(html, /href="https:\/\/calatorulantreprenor\.com\/club"[^>]*>[^<]*Intră în club/);
+  for (const p of ['/destinatii', '/travorium', '/excursii', '/calendar', '/academie', '/comunitate'])
+    assert.match(html, new RegExp(`href="${p}"`), p);
+});
