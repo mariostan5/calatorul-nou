@@ -1,11 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/home/Hero.astro';
+import Destinations from '../components/home/Destinations.astro';
+import Trips from '../components/home/Trips.astro';
+import Community from '../components/home/Community.astro';
+import Crossroads from '../components/home/Crossroads.astro';
+import EventList from '../components/EventList.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { faqGeneral, faqClub } from '../data/faq';
 ---
 <Base>
   <main>
     <Hero />
-    <section id="destinatii" class="section"><div class="wrap stack"><p class="kicker label">Destinații</p><h2 class="h2">Unde ai putea să vii <em>cu noi.</em></h2><p class="lead">Secțiunea vine în pasul următor.</p></div></section>
-    <section class="section" style="height:60vh"></section>
+    <Destinations />
+    <Trips />
+    <Community />
+    <Crossroads />
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">Calendar</p>
+        <h2 class="h2" data-split>Următoarele <em>întâlniri live.</em></h2>
+        <p class="lead" data-reveal>Webinarii și workshop-uri pe Zoom, gratuite. Cel mai bun loc să afli cum funcționează clubul.</p>
+        <EventList />
+        <p class="actions"><a class="btn btn-ghost" href="/calendar">Tot calendarul</a></p>
+      </div>
+    </section>
+    <Faq items={[...faqClub.slice(0, 2), ...faqGeneral]} />
+    <FinalCta />
   </main>
+  <Lightbox />
 </Base>

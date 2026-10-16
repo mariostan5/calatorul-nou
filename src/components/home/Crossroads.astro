@@ -1,0 +1,40 @@
+---
+import IncomeNote from '../IncomeNote.astro';
+import { photos } from '../../data/photos';
+
+const paths = [
+  { tag: 'Travorium', title: 'Doar călătorii', text: 'Vacanțe la prețuri de membru, voucher de bun venit, cashback 3% și excursii de grup alături de comunitate.', href: '/travorium', cta: 'Vreau să călătoresc', img: photos[2].thumb },
+  { tag: 'Academie', title: 'Și business', text: 'Workshop-uri live în fiecare săptămână, un plan pe 90 de zile și un mentor care a parcurs drumul înaintea ta.', href: '/academie', cta: 'Vreau să construiesc', img: photos[5].thumb },
+];
+---
+<section class="section cross">
+  <div class="wrap stack">
+    <p class="kicker label">Răscrucea</p>
+    <h2 class="h2" data-split>Doar călătorii? Sau <em>și business?</em></h2>
+    <p class="lead" data-reveal>Mulți membri vin doar pentru vacanțe. Alții vor să construiască, în paralel, ceva al lor. Alegi tu drumul.</p>
+    <div class="cross-grid">
+      {paths.map((p) => (
+        <a class="cross-card" href={p.href} data-reveal>
+          <span class="cross-img" data-img><img src={p.img} alt="" loading="lazy" width="512" height="384" /></span>
+          <span class="kicker label">{p.tag}</span>
+          <span class="h3">{p.title}</span>
+          <span class="cross-text">{p.text}</span>
+          <span class="btn btn-primary">{p.cta}</span>
+        </a>
+      ))}
+    </div>
+    <IncomeNote />
+  </div>
+</section>
+
+<style is:global>
+  .cross { background: var(--card); border-block: 1px solid var(--line); }
+  .cross-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 52px !important; }
+  .cross-card { display: grid; justify-items: center; gap: 14px; padding: 18px 18px 34px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg); text-align: center; transition: border-color .4s, transform .6s var(--ease-out); }
+  .cross-card:hover { border-color: var(--accent-ink); transform: translateY(-4px); }
+  .cross-img { display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius); }
+  .cross-img img { width: 100%; height: 100%; object-fit: cover; }
+  .cross-text { max-width: 42ch; color: var(--muted); }
+  .cross .income-note { margin-top: 32px !important; }
+  @media (max-width: 900px) { .cross-grid { grid-template-columns: 1fr; } }
+</style>

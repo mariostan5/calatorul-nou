@@ -1,0 +1,38 @@
+---
+/* The next live meetings. Rendered at build in Bucharest time, then rewritten in the browser in the
+   visitor's own time zone (the platform shows "în ora ta locală" too). */
+import { getCollection } from 'astro:content';
+import { upcoming, formatLocal } from '../lib/events';
+import { config } from '../config';
+
+interface Props { limit?: number }
+const events = (await getCollection('events')).map((e) => e.data);
+const next = upcoming(events, new Date(), Astro.props.limit ?? 3);
+---
+<ul class="events">
+  {next.map(({ ev, at }) => (
+    <li class="event" data-reveal>
+      <p class="label event-when"><time datetime={at.toISOString()} data-local>{formatLocal(at, 'Europe/Bucharest')}</time>{ev.weekly && <span> · în fiecare săptămână</span>}</p>
+      <p class="h3">{ev.title}</p>
+      <p class="event-sum">{ev.summary}</p>
+      <a class="btn btn-primary" href={config.links.calendar}>Rezervă-ți locul</a>
+    </li>
+  ))}
+</ul>
+<p class="events-tz label">Orele sunt afișate în fusul tău orar.</p>
+
+<style is:global>
+  .events { display: grid; gap: 18px; max-width: 860px; margin: 48px auto 0 !important; }
+  .event { display: grid; justify-items: center; gap: 10px; padding: 34px 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--card); text-align: center; }
+  .event-when { color: var(--accent-ink); }
+  .event-sum { max-width: 60ch; color: var(--muted); }
+  .events-tz { margin-top: 18px !important; color: var(--muted); }
+</style>
+
+<script>
+  import { onPage, $$ } from '../scripts/motion';
+  import { formatLocal } from '../lib/events';
+  onPage(() => {
+    $$<HTMLTimeElement>('time[data-local]').forEach((t) => (t.textContent = formatLocal(new Date(t.dateTime))));
+  });
+</script>

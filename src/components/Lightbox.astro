@@ -1,0 +1,44 @@
+---
+/* One full-screen viewer per page: any [data-lightbox] link opens its photo, growing out of the
+   thumbnail that was clicked. Esc, the button or a click outside closes it. */
+---
+<dialog class="lb" aria-label="Fotografie">
+  <figure><img alt="" /><figcaption></figcaption></figure>
+  <button class="lb-x" type="button" aria-label="Închide">×</button>
+</dialog>
+
+<style is:global>
+  .lb { margin: auto; max-width: min(92vw, 1400px); max-height: 92vh; padding: 0; border: 0; border-radius: var(--radius-lg); background: transparent; overflow: visible; }
+  .lb::backdrop { background: rgba(8, 20, 34, .82); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .lb img { max-width: min(92vw, 1400px); max-height: 84vh; width: auto; border-radius: var(--radius-lg); }
+  .lb figcaption { padding-top: 12px; text-align: center; color: #fff; font-size: 14px; }
+  .lb figcaption:empty { display: none; }
+  .lb-x { position: fixed; top: 18px; right: 22px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: #0A0A0A; font-size: 26px; line-height: 1; cursor: pointer; }
+</style>
+
+<script>
+  import { onPage, $, gsap, reducedMotion } from '../scripts/motion';
+  onPage(() => {
+    const lb = $<HTMLDialogElement>('dialog.lb');
+    if (!lb) return;
+    const img = $<HTMLImageElement>('img', lb)!, cap = $('figcaption', lb)!;
+    const open = (e: Event) => {
+      const a = (e.target as Element).closest<HTMLAnchorElement>('a[data-lightbox]');
+      if (!a) return;
+      e.preventDefault();
+      img.src = a.href;
+      img.alt = a.dataset.caption || '';
+      cap.textContent = a.dataset.caption || '';
+      lb.showModal();
+      if (reducedMotion()) return;
+      // FLIP: start where the thumbnail was
+      const from = a.getBoundingClientRect(), to = lb.getBoundingClientRect();
+      gsap.fromTo(lb, { x: from.left + from.width / 2 - (to.left + to.width / 2), y: from.top + from.height / 2 - (to.top + to.height / 2), scale: from.width / Math.max(to.width, 1), opacity: 0.4 },
+        { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.8, ease: 'expo.out' });
+    };
+    const close = (e: Event) => { if (e.target === lb || (e.target as Element).closest('.lb-x')) lb.close(); };
+    document.addEventListener('click', open);
+    lb.addEventListener('click', close);
+    return () => document.removeEventListener('click', open);
+  });
+</script>

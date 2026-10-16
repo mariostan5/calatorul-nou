@@ -1,0 +1,31 @@
+---
+import { photos } from '../../data/photos';
+
+const pick = [12, 14, 0, 22, 33, 38, 40, 26, 18, 45, 9, 30].map((i) => photos[i]);
+---
+<section class="section community">
+  <div class="wrap stack">
+    <p class="kicker label">Comunitate</p>
+    <h2 class="h2" data-split>O comunitate <em>cum nu ai mai văzut.</em></h2>
+    <p class="counter"><span class="num" data-count="700" data-suffix="+">700+</span><span class="label">români din toată lumea</span></p>
+    <div class="mosaic">
+      {pick.map((p) => (
+        <a href={p.src} data-lightbox data-caption="Din excursiile comunității Călătorul Antreprenor" data-img>
+          <img src={p.thumb} alt="Membri ai comunității într-o excursie de grup" loading="lazy" width="512" height="384" />
+        </a>
+      ))}
+    </div>
+    <p class="actions"><a class="btn btn-ghost" href="/comunitate">Toată galeria</a></p>
+  </div>
+</section>
+
+<style is:global>
+  .counter { display: grid; justify-items: center; gap: 6px; }
+  .counter .num { font-family: var(--display); font-size: clamp(64px, 8vw, 140px); font-weight: 600; line-height: 1; color: var(--accent-ink); }
+  .counter .label { color: var(--muted); }
+  .mosaic { columns: 4 220px; column-gap: 14px; margin-top: 48px !important; }
+  .mosaic a { display: block; margin-bottom: 14px; overflow: hidden; border-radius: var(--radius); break-inside: avoid; cursor: zoom-in; }
+  .mosaic img { width: 100%; height: auto; transition: transform .9s var(--ease-out); }
+  .mosaic a:hover img { transform: scale(1.04); }
+  .community .actions { margin-top: 32px !important; }
+</style>
