@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { faqClub } from '../data/faq';
+import { config } from '../config';
+
+const benefits = [
+  ['Puncte de călătorie', 'Primești puncte în fiecare lună și le folosești la rezervare, în nopți la hoteluri de 4–5★.'],
+  ['Voucher de bun venit', 'Prima vacanță începe cu un voucher: alegi destinația din lista clubului.'],
+  ['Cashback 3%', 'O parte din fiecare rezervare la hoteluri și croaziere se întoarce la tine.'],
+  ['Prețuri de membru', 'Peste 2.000 de destinații și hoteluri la prețuri pe care le vezi doar ca membru.'],
+  ['Excursii de grup', 'Pleci alături de comunitate, aproape în fiecare lună, cu totul organizat.'],
+  ['Pentru familie', 'Rezervi pentru tine și pentru cei dragi, cu aceleași beneficii.'],
+];
+const steps = [
+  ['Vii la Zoom', 'Joi, la 19:00, ora României, afli cum funcționează clubul. Gratuit.'],
+  ['Devii membru', 'Alegi abonamentul și primești acces în platformă și în Travorium.'],
+  ['Pleci', 'Folosești voucherul de bun venit și îți alegi prima vacanță sau prima excursie de grup.'],
+];
+const inside = [
+  ['Chat-ul comunității', 'Peste 700 de români din toată lumea, într-un singur loc. Pleci singur, te întorci cu prieteni.'],
+  ['Membri din toată lumea', 'Oameni din Europa, America și Asia care călătoresc și se ajută între ei.'],
+  ['Sistemul pas cu pas', 'Ghiduri clare în platformă: cum rezervi, cum folosești punctele, cum pregătești o excursie.'],
+];
+---
+<Base title="Travorium · Călătorul Antreprenor">
+  <main>
+    <PageHead kicker="Travorium" title="Clubul de călătorii" em="al comunității." sub="Vacanțe la prețuri de membru, voucher de bun venit, cashback și excursii de grup, într-un singur abonament." />
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">Beneficii</p>
+        <h2 class="h2" data-split>Ce primești <em>ca membru.</em></h2>
+        <ul class="cards">{benefits.map(([t, p]) => <li class="card" data-reveal><h3 class="h3">{t}</h3><p>{p}</p></li>)}</ul>
+      </div>
+    </section>
+    <section class="section alt">
+      <div class="wrap stack">
+        <p class="kicker label">Cum intri</p>
+        <h2 class="h2" data-split>Trei pași <em>până la bord.</em></h2>
+        <ol class="cards">{steps.map(([t, p], i) => <li class="card" data-reveal><span class="n">{String(i + 1).padStart(2, '0')}</span><h3 class="h3">{t}</h3><p>{p}</p></li>)}</ol>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">În platformă</p>
+        <h2 class="h2" data-split>Ce găsești <em>înăuntru.</em></h2>
+        <ul class="cards">{inside.map(([t, p]) => <li class="card" data-reveal><h3 class="h3">{t}</h3><p>{p}</p></li>)}</ul>
+      </div>
+    </section>
+    <Faq items={faqClub} title="Întrebări despre" em="Travorium." />
+    <FinalCta href={config.links.travorium} label="Intră în Travorium" title="Prima vacanță" em="începe aici." />
+  </main>
+</Base>

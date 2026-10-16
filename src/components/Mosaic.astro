@@ -1,0 +1,18 @@
+---
+/* Trip photos in columns; each opens full size in the page's <Lightbox />. */
+interface Props { items: { src: string; thumb: string }[] }
+---
+<div class="mosaic">
+  {Astro.props.items.map((p) => (
+    <a href={p.src} data-lightbox data-caption="Din excursiile comunității Călătorul Antreprenor" data-img>
+      <img src={p.thumb} alt="Membri ai comunității într-o excursie de grup" loading="lazy" width="512" height="384" />
+    </a>
+  ))}
+</div>
+
+<style is:global>
+  .mosaic { columns: 4 220px; column-gap: 14px; margin-top: 48px !important; }
+  .mosaic a { display: block; margin-bottom: 14px; overflow: hidden; border-radius: var(--radius); break-inside: avoid; cursor: zoom-in; }
+  .mosaic img { width: 100%; height: auto; transition: transform .9s var(--ease-out); }
+  .mosaic a:hover img { transform: scale(1.04); }
+</style>

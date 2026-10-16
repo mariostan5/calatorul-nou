@@ -35,3 +35,29 @@ test('home: destinations, trips, community, crossroads, calendar, FAQ', () => {
 test('home: no money amounts', () => {
   assert.doesNotMatch(page().replace(/<script[\s\S]*?<\/script>/g, ''), MONEY);
 });
+
+const PAGES = {
+  'travorium/index.html': 'https://calatorulantreprenor.com/club/travorium',
+  'calendar/index.html': 'https://calatorulantreprenor.com/club/calendar',
+  'academie/index.html': 'https://calatorulantreprenor.com/club/classroom',
+  'excursii/index.html': 'https://calatorulantreprenor.com/club/trips',
+  'comunitate/index.html': 'https://calatorulantreprenor.com/club/comunitate',
+  'destinatii/index.html': 'https://calatorulantreprenor.com/club/travorium',
+};
+
+test('inner pages exist and each leads to its part of the platform', () => {
+  for (const [p, href] of Object.entries(PAGES)) assert.match(page(p), new RegExp(`href="${href}"`), p);
+});
+
+test('every destination has its page', () => {
+  for (const slug of ['bali', 'cancun', 'danang', 'dubai', 'las-vegas', 'phuket', 'shanghai'])
+    assert.match(page(`destinatii/${slug}/index.html`), /<h1/, slug);
+});
+
+test('the Academie page carries the income note', () => {
+  assert.match(page('academie/index.html'), /Rezultatele diferă de la om la om/);
+});
+
+test('inner pages show no money amounts', () => {
+  for (const p of Object.keys(PAGES)) assert.doesNotMatch(page(p).replace(/<script[\s\S]*?<\/script>/g, ''), MONEY, p);
+});

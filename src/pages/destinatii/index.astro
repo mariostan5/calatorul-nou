@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { config } from '../../config';
+
+const list = (await getCollection('destinations')).sort((a, b) => a.data.order - b.data.order);
+const continents = [...new Set(list.map((d) => d.data.continent))];
+---
+<Base title="Destinații · Călătorul Antreprenor">
+  <main>
+    <PageHead kicker="Destinații" title="Unde ai putea" em="să vii cu noi." sub="Peste 2.000 de destinații la prețuri de membru. Acestea sunt cele în care comunitatea a fost deja sau pleacă în curând." />
+    <section class="section" data-filters>
+      <div class="wrap stack">
+        <p class="filters actions" role="group" aria-label="Filtrează după continent">
+          <button class="btn btn-ghost" type="button" data-filter="" aria-pressed="true">Toate</button>
+          {continents.map((c) => <button class="btn btn-ghost" type="button" data-filter={c} aria-pressed="false">{c}</button>)}
+        </p>
+        <ul class="dest-grid">
+          {list.map((d) => (
+            <li data-tags={d.data.continent}>
+              <a class="dest-card" href={`/destinatii/${d.id}`}>
+                <Image src={d.data.image} alt={`${d.data.name}, ${d.data.country}`} widths={[420, 720]} sizes="(max-width: 900px) 90vw, 30vw" />
+                <span class="dest-meta"><span class="h3">{d.data.name}</span><span class="dest-country">{d.data.country}</span><span class="dest-price label">prețuri de membru</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+    <FinalCta href={config.links.travorium} label="Rezervă prin Travorium" title="Alege-ți" em="următorul zbor." />
+  </main>
+</Base>
+
+<style is:global>
+  .filters .btn[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: #0A0A0A; }
+  .dest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 40px !important; }
+  .dest-grid .dest-card { width: 100%; }
+  .dest-grid li[hidden] { display: none; }
+</style>
+
+<script>
+  import { onPage, $ } from '../../scripts/motion';
+  import { initFilter } from '../../scripts/filter';
+  onPage(() => {
+    const root = $('[data-filters]');
+    if (root) return initFilter(root);
+  });
+</script>

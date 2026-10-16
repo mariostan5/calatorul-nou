@@ -26,7 +26,10 @@ export function onPage(fn: () => Cleanup | void) {
   });
 }
 
-const fadeIn = (el: Element) => gsap.from(el, { opacity: 0, duration: 0.8, scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
+// play once and stay; not `once: true`, which kills a trigger already in view while ScrollTrigger is
+// still creating the others and leaves a hole in its list ("Cannot read properties of undefined (reading 'end')")
+const PLAY = 'play none none none';
+const fadeIn = (el: Element) => gsap.from(el, { opacity: 0, duration: 0.8, scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: PLAY } });
 
 /** [data-split] titles rise line by line, [data-reveal] blocks rise, [data-img] images open from a mask, [data-count] numbers count up. */
 function reveals(): Cleanup {
@@ -36,16 +39,16 @@ function reveals(): Cleanup {
     if (rm) return fadeIn(el);
     splits.push(SplitText.create(el, {
       type: 'lines', mask: 'lines', linesClass: 'ln', autoSplit: true,
-      onSplit: (self) => gsap.from(self.lines, { yPercent: 110, duration: 1.25, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: el, start: 'top 88%', once: true } }),
+      onSplit: (self) => gsap.from(self.lines, { yPercent: 110, duration: 1.25, ease: 'expo.out', stagger: 0.08, scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: PLAY } }),
     }));
   });
   $$('[data-reveal]').forEach((el) => {
     if (rm) return fadeIn(el);
-    gsap.from(el, { y: 40, opacity: 0, duration: 1.2, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+    gsap.from(el, { y: 40, opacity: 0, duration: 1.2, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: PLAY } });
   });
   $$('[data-img]').forEach((el) => {
     if (rm) return fadeIn(el);
-    gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 88%', once: true } })
+    gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: PLAY } })
       .fromTo(el, { clipPath: 'inset(14% 10% 14% 10%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'expo.out' })
       .from($('img', el), { scale: 1.15, duration: 1.6, ease: 'expo.out' }, 0);
   });
@@ -53,7 +56,8 @@ function reveals(): Cleanup {
     if (rm) return;
     const to = +el.dataset.count!, suf = el.dataset.suffix || '', o = { v: 0 };
     el.textContent = fmt(0) + suf;
-    ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: () => gsap.to(o, { v: to, duration: 1.6, ease: 'power3.out', onUpdate: () => (el.textContent = fmt(o.v) + suf) }) });
+    let done = false;
+    ScrollTrigger.create({ trigger: el, start: 'top 88%', onEnter: () => !done && (done = true) && gsap.to(o, { v: to, duration: 1.6, ease: 'power3.out', onUpdate: () => (el.textContent = fmt(o.v) + suf) }) });
   });
   return () => splits.forEach((s) => s.revert());
 }

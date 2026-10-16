@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Mosaic from '../components/Mosaic.astro';
+import Lightbox from '../components/Lightbox.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { photos } from '../data/photos';
+import { config } from '../config';
+---
+<Base title="Comunitate · Călătorul Antreprenor">
+  <main>
+    <PageHead kicker="Comunitate" title="Oameni reali," em="excursii reale." sub="Fotografii din excursiile de grup ale comunității Călătorul Antreprenor." />
+    <section class="section">
+      <div class="wrap stack">
+        <p class="counter"><span class="num" data-count="700" data-suffix="+">700+</span><span class="label">români din toată lumea</span></p>
+        <Mosaic items={photos} />
+      </div>
+    </section>
+    <FinalCta href={config.links.comunitate} label="Intră în comunitate" title="Te așteptăm" em="în grup." />
+  </main>
+  <Lightbox />
+</Base>

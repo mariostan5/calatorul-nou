@@ -37,8 +37,9 @@
         { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.8, ease: 'expo.out' });
     };
     const close = (e: Event) => { if (e.target === lb || (e.target as Element).closest('.lb-x')) lb.close(); };
-    document.addEventListener('click', open);
+    // capture: before the ClientRouter's own click handler would navigate to the image
+    document.addEventListener('click', open, true);
     lb.addEventListener('click', close);
-    return () => document.removeEventListener('click', open);
+    return () => document.removeEventListener('click', open, true);
   });
 </script>

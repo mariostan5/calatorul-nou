@@ -1,0 +1,50 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { config } from '../../config';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('destinations')).sort((a, b) => a.data.order - b.data.order);
+  return all.map((d) => ({ params: { slug: d.id }, props: { d, others: all.filter((o) => o.id !== d.id).slice(0, 3) } }));
+}
+interface Props { d: CollectionEntry<'destinations'>; others: CollectionEntry<'destinations'>[] }
+const { d, others } = Astro.props;
+---
+<Base title={`${d.data.name} · Destinații · Călătorul Antreprenor`} description={d.data.why}>
+  <main>
+    <PageHead kicker={`${d.data.country} · ${d.data.continent}`} title={d.data.name} em="cu clubul." image={d.data.image} />
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">De ce merită</p>
+        <p class="why" data-reveal>{d.data.why}</p>
+      </div>
+    </section>
+    <section class="section alt">
+      <div class="wrap stack">
+        <p class="kicker label">Ca membru</p>
+        <h2 class="h2" data-split>Ce primești <em>acolo.</em></h2>
+        <ul class="cards">{d.data.member.map((m, i) => <li class="card" data-reveal><span class="n">{String(i + 1).padStart(2, '0')}</span><p>{m}</p></li>)}</ul>
+        <p class="dest-note label">Prețurile se văd în platformă, după autentificare: prețuri de membru.</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">Mai departe</p>
+        <h2 class="h2" data-split>Alte <em>destinații.</em></h2>
+        <ul class="cards">
+          {others.map((o) => (
+            <li><a class="dest-card" href={`/destinatii/${o.id}`}><Image src={o.data.image} alt={`${o.data.name}, ${o.data.country}`} width={480} /><span class="dest-meta"><span class="h3">{o.data.name}</span><span class="dest-country">{o.data.country}</span></span></a></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+    <FinalCta href={config.links.travorium} label="Rezervă prin Travorium" title={`${d.data.name}`} em="te așteaptă." />
+  </main>
+</Base>
+
+<style is:global>
+  .dest-note { margin-top: 28px !important; color: var(--muted); }
+</style>

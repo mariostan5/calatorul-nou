@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Tickets from '../components/Tickets.astro';
+import Mosaic from '../components/Mosaic.astro';
+import Lightbox from '../components/Lightbox.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { photos } from '../data/photos';
+import { config } from '../config';
+---
+<Base title="Excursii de grup · Călătorul Antreprenor">
+  <main>
+    <PageHead kicker="Excursii de grup" title="Pleci cu noi," em="te întorci cu prieteni." sub="Excursii organizate cu comunitatea, aproape în fiecare lună." />
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">Următoarele</p>
+        <h2 class="h2" data-split>Biletele <em>de grup.</em></h2>
+        <Tickets />
+      </div>
+    </section>
+    <section class="section alt">
+      <div class="wrap stack">
+        <p class="kicker label">Din excursiile trecute</p>
+        <h2 class="h2" data-split>Așa arată <em>o excursie.</em></h2>
+        <Mosaic items={photos.slice(0, 24)} />
+      </div>
+    </section>
+    <FinalCta href={config.links.trips} label="Vezi excursiile în platformă" title="Locul tău" em="în grup." />
+  </main>
+  <Lightbox />
+</Base>

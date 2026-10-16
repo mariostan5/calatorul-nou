@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import IncomeNote from '../components/IncomeNote.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { config } from '../config';
+
+const topics = [
+  ['Marketing', 'Cum te faci văzut și cum atragi oamenii potriviți.'],
+  ['Vânzări', 'Conversații firești, fără presiune, cu oameni care chiar au nevoie.'],
+  ['Social media', 'Ce postezi, când și cum îți construiești o prezență.'],
+  ['AI', 'Unelte care îți economisesc timp, folosite practic.'],
+];
+const month = [
+  ['4 workshop-uri live pe lună', 'Sesiuni practice pe Zoom, cu întrebări la final.'],
+  ['Un plan pe 90 de zile', 'Făcut după obiectivul tău și după timpul pe care îl ai.'],
+  ['Un mentor dedicat', 'Sprijin constant de la oameni care au parcurs drumul.'],
+];
+---
+<Base title="Academie · Călătorul Antreprenor">
+  <main>
+    <PageHead kicker="Academie" title="Construiești, în paralel," em="ceva al tău." sub="Pentru membrii care vor mai mult decât vacanțe: învățare săptămânală, un plan și oameni alături." />
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">Ce înveți</p>
+        <h2 class="h2" data-split>Patru teme, <em>practic.</em></h2>
+        <ul class="cards">{topics.map(([t, p]) => <li class="card" data-reveal><h3 class="h3">{t}</h3><p>{p}</p></li>)}</ul>
+      </div>
+    </section>
+    <section class="section alt">
+      <div class="wrap stack">
+        <p class="kicker label">Cum arată</p>
+        <h2 class="h2" data-split>O lună <em>în Academie.</em></h2>
+        <ul class="cards">{month.map(([t, p], i) => <li class="card" data-reveal><span class="n">{String(i + 1).padStart(2, '0')}</span><h3 class="h3">{t}</h3><p>{p}</p></li>)}</ul>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap stack">
+        <p class="kicker label">Pe scurt</p>
+        <p class="why" data-reveal>Proces, timp, efort și sprijin. Fiecare merge în ritmul lui.</p>
+        <IncomeNote />
+      </div>
+    </section>
+    <FinalCta href={config.links.academie} label="Intră în Academie" title="Primul pas" em="e o lecție." />
+  </main>
+</Base>

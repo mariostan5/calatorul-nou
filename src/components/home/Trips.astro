@@ -1,16 +1,7 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import Tickets from '../Tickets.astro';
 import { photos } from '../../data/photos';
 
-const now = new Date();
-const trips = await Promise.all(
-  (await getCollection('trips'))
-    .filter((t) => t.data.start >= now)
-    .sort((a, b) => +a.data.start - +b.data.start)
-    .slice(0, 3)
-    .map(async (t) => ({ ...t.data, dest: (await getEntry(t.data.destination))! })),
-);
 const strip = photos.slice(0, 12);
 ---
 <section class="section trips">
@@ -18,20 +9,7 @@ const strip = photos.slice(0, 12);
     <p class="kicker label">Excursii de grup</p>
     <h2 class="h2" data-split>Următoarele <em>zboruri.</em></h2>
     <p class="lead" data-reveal>Pleci alături de comunitate, aproape în fiecare lună. Alegi excursia, noi ne ocupăm de rest.</p>
-    <ul class="tickets">
-      {trips.map((t) => (
-        <li class="ticket" data-reveal>
-          <Image class="ticket-img" src={t.dest.data.image} alt="" width={480} />
-          <div class="ticket-body">
-            <p class="label ticket-kind">Bilet de grup · Călătorul Antreprenor</p>
-            <p class="h3">{t.dest.data.name}</p>
-            <p class="ticket-country">{t.dest.data.country}</p>
-            <p class="ticket-dates">{t.dates}</p>
-            <p class="ticket-sum">{t.summary}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <Tickets limit={3} />
     <p class="actions"><a class="btn btn-primary" href="/excursii">Toate excursiile</a></p>
   </div>
   <div class="strip" aria-hidden="true">
@@ -40,18 +18,6 @@ const strip = photos.slice(0, 12);
 </section>
 
 <style is:global>
-  .tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; margin-top: 52px !important; }
-  .ticket { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--card); text-align: center; }
-  .ticket-img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
-  /* the tear line of a boarding pass */
-  .ticket-body { position: relative; display: grid; gap: 4px; padding: 30px 24px 28px; border-top: 2px dashed var(--line); }
-  .ticket-body::before, .ticket-body::after { content: ""; position: absolute; top: -11px; width: 20px; height: 20px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); }
-  .ticket-body::before { left: -11px; } .ticket-body::after { right: -11px; }
-  .ticket-kind { color: var(--accent-ink); font-size: 10px; }
-  .ticket .h3 { margin-top: 8px; }
-  .ticket-country { color: var(--muted); font-size: 14px; }
-  .ticket-dates { margin-top: 10px; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .ticket-sum { margin-top: 6px; color: var(--muted); font-size: 14px; }
   .trips .actions { margin-top: 40px !important; }
   .strip { margin-top: 90px; overflow: hidden; }
   .strip-row { display: flex; gap: 14px; width: max-content; animation: strip 70s linear infinite; }
