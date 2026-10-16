@@ -1,0 +1,13 @@
+{
+  "name": "Shanghai",
+  "country": "China",
+  "continent": "Asia",
+  "image": "./shanghai.jpg",
+  "why": "Zgârie-nori, temple vechi și cartierul Bund noaptea, alături de grup.",
+  "member": [
+    "Cazare la hoteluri de 4–5★ la prețuri de membru",
+    "Puncte de călătorie folosite la rezervare",
+    "Excursie de grup cu comunitatea, când e în calendar"
+  ],
+  "order": 1
+}

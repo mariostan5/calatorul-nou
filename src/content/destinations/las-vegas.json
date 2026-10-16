@@ -1,0 +1,13 @@
+{
+  "name": "Las Vegas",
+  "country": "SUA",
+  "continent": "America",
+  "image": "./las-vegas.jpg",
+  "why": "Spectacole, Strip-ul luminat și o zi întreagă la Grand Canyon.",
+  "member": [
+    "Cazare la hoteluri de 4–5★ la prețuri de membru",
+    "Puncte de călătorie folosite la rezervare",
+    "Excursie de grup cu comunitatea, când e în calendar"
+  ],
+  "order": 4
+}
