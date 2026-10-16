@@ -1,34 +1,36 @@
 ---
-/* The hero: an open sky, the words in the middle and the porthole under them. Scrolling holds the
-   section in place while the words lift away and the porthole grows until you pass through its glass
-   into the clouds (src/scripts/hero.ts). Without JS or with reduced motion it simply stays as it is. */
+/* The hero: you sit in the cabin, the wall and its porthole fill the screen, the clouds outside.
+   Scrolling holds the section while the words lift away and the wall grows around the glass until
+   you pass through it into the sky (src/scripts/hero.ts). Without JS or with reduced motion it stays put. */
 ---
 <section class="hero" data-hero aria-label="Bun venit">
-  <video class="hero-sky" src="/hero/sky.mp4" poster="/hero/sky.webp" autoplay muted loop playsinline aria-hidden="true"></video>
-  <div class="hero-copy wrap stack">
+  <img class="hero-sky" src="/hero/clouds.webp" alt="" width="1600" height="2400" fetchpriority="high" />
+  <div class="hero-wall" aria-hidden="true"><img src="/hero/cabin-wall.webp" alt="" width="2208" height="920" fetchpriority="high" /></div>
+  <div class="hero-copy wrap">
     <p class="kicker label">Clubul românilor care călătoresc</p>
-    <h1 class="h1">Lumea se vede altfel <em>de la hublou.</em></h1>
-    <p class="lead">Comunitatea românilor care călătoresc mai mult și construiesc, în paralel, ceva al lor.</p>
+    <h1 class="h1">Mergi cu noi <em>în vacanțe?</em></h1>
     <p class="actions"><a class="btn btn-primary" href="#destinatii">Urcă la bord</a></p>
   </div>
-  <div class="hero-port" aria-hidden="true"><img src="/hero/hublou-frame.webp" alt="" width="960" height="1200" fetchpriority="high" /></div>
+  <p class="hero-cue label" aria-hidden="true"><span>Derulează și treci prin hublou</span><i></i></p>
   <div class="hero-veil" aria-hidden="true"></div>
 </section>
 
 <style is:global>
-  .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; color: #fff; background: var(--sky-top); }
-  .hero-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  /* a little depth at the top so white words read on a bright sky */
-  .hero::before { content: ""; position: absolute; inset: 0 0 45%; z-index: 1; background: linear-gradient(rgba(16, 52, 96, .38), transparent); pointer-events: none; }
-  .hero-copy { position: relative; z-index: 2; padding-top: clamp(96px, 13vh, 132px); }
-  .hero-copy h1 { font-size: clamp(44px, 5.4vw, 92px); text-shadow: 0 2px 24px rgba(10, 45, 90, .28); }
-  .hero-copy > * + * { margin-top: 16px; }
+  .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; color: #fff; background: #2D5A7C; }
+  /* outside: the clouds, a little closer than life so they can settle as you go through */
+  .hero-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform: scale(1.18); will-change: transform; }
+  /* the wall is 2208 × 920 with the glass in its middle; it always covers the screen */
+  .hero-wall { position: absolute; left: 50%; top: 50%; height: max(100vh, 640px, calc(100vw * 920 / 2208)); aspect-ratio: 2208 / 920; translate: -50.82% -50%; /* the glass, not the image, sits in the middle */ }
+  /* the image inside is what grows (GSAP would turn the box's CSS translate into fixed pixels) */
+  .hero-wall img { width: 100%; height: 100%; transform-origin: 50.82% 50%; will-change: transform; }
+  .hero-wall::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 75% at 50.8% 50%, transparent 55%, rgba(8, 28, 48, .45)); }
+  .hero-copy { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
   .hero-copy .kicker { color: #fff; }
-  .hero-copy .lead { color: rgba(255, 255, 255, .92); text-shadow: 0 1px 12px rgba(10, 45, 90, .3); }
-  /* the porthole sits under the words; its glass is cut out, so the same sky shows through */
-  .hero-port { position: absolute; z-index: 1; left: 50%; bottom: -14vh; height: 58vh; aspect-ratio: 960 / 1200; translate: -50% 0; transform-origin: 50.7% 50.1%; will-change: transform; }
-  .hero-port img { width: 100%; height: 100%; }
-  .hero-veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(120% 90% at 50% 55%, #fff 30%, var(--bg) 70%); }
+  .hero-copy h1 { font-size: clamp(54px, 7.4vw, 132px); text-shadow: 0 4px 40px rgba(8, 28, 48, .55); }
+  .hero-cue { position: absolute; z-index: 2; inset: auto 0 28px; display: grid; justify-items: center; gap: 12px; color: rgba(255, 255, 255, .85); }
+  .hero-cue i { width: 1px; height: 46px; background: linear-gradient(#fff, transparent); animation: cue 2.2s var(--ease-inout) infinite; transform-origin: top; }
+  @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+  .hero-veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(120% 90% at 50% 50%, #fff 30%, var(--bg) 70%); }
   .hero + * { position: relative; z-index: 1; }
 </style>
 

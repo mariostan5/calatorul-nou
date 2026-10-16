@@ -38,7 +38,7 @@ Chat, Membri și System din platformă nu primesc pagini; apar ca argumente pe T
 ## 4. Pagina Acasă (în ordine)
 
 1. **Meniu** (§3).
-2. **Hero cu hublou** — fundal: video scurt cu cer și nori care se mișcă încet (fallback: imagine). Centrat: titlu (ex. „Lumea se vede altfel *de la hublou.*”), subtitlu, buton „Urcă la bord”, sub ele hubloul. La scroll secțiunea e fixată (pin, ~250vh): textul urcă și se estompează, hubloul crește până umple ecranul, treci prin geam în nori, iar din nori apare secțiunea următoare.
+2. **Hero cu hublou** — din cabină: peretele avionului cu hubloul în centru, norii prin geam (§6). Centrat peste hublou: kicker, titlu „Mergi cu noi *în vacanțe?*”, buton „Urcă la bord”, indicator „Derulează și treci prin hublou”. La scroll secțiunea e fixată (pin, ~250vh): textul urcă și se estompează, hubloul crește până umple ecranul, treci prin geam în nori, iar din nori apare secțiunea următoare.
 3. **Destinații** — carusel tras cu mouse-ul/degetul; card: poză, nume, țară, „prețuri de membru” (fără sume). Click → pagina destinației.
 4. **Excursii de grup** — următoarele excursii ca bilete de avion + o fâșie de poze din excursiile trecute.
 5. **Comunitate** — poze din Travorium care se măresc la click (lightbox), cifra „700+ români din toată lumea”.
@@ -56,11 +56,7 @@ Chat, Membri și System din platformă nu primesc pagini; apar ca argumente pe T
 
 ## 6. Hubloul
 
-Se folosește `site/legacy/assets/hublou.jpg` (960×1200, apus, perete de cabină întunecat):
-- geamul se decupează (mască ovală / PNG cu transparență), iar prin el se vede cerul de zi al paginii, nu apusul din poză;
-- rama se deschide la culoare ca să meargă cu lumina de zi;
-- peretele întunecat se topește radial spre marginile ecranului în cerul paginii.
-Dacă rama rămâne prea caldă lângă cer, se generează un hublou nou în același unghi (se cere acordul înainte).
+(Schimbat la cererea utilizatorului, 2026-10-16.) Hero-ul pornește **din cabină**: peretele avionului (poza cu hublou albastru-deschis primită de la utilizator, extinsă lateral cu culoarea peretelui, geamul decupat) umple ecranul, iar prin geam se văd norii la răsărit (a doua poză primită). Titlul „Mergi cu noi *în vacanțe?*” stă centrat peste hublou. La scroll peretele crește în jurul geamului până treci prin el, norii se apropie (118% → 100%), apoi un văl de nor duce în secțiunea următoare. Fișiere: `public/hero/cabin-wall.webp`, `public/hero/clouds.webp`.
 
 ## 7. Conținut și date
 
