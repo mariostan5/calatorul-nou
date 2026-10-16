@@ -11,7 +11,6 @@
     <h1 class="hero-name"><span class="hl-line">Călătorul</span><span class="hl-line">Antreprenor</span></h1>
   </div>
   <p class="hero-cue label" aria-hidden="true"><span>Derulează și treci prin hublou</span><i></i></p>
-  <div class="hero-veil" aria-hidden="true"></div>
   <div class="intro" hidden aria-hidden="true">
     <div class="intro-mark">
       <svg viewBox="0 0 100 100"><circle class="ring-a" cx="50" cy="50" r="48" pathLength="1" /><circle class="ring-b" cx="50" cy="50" r="44" pathLength="1" /></svg>
@@ -46,8 +45,6 @@
   .hero-cue { position: absolute; z-index: 2; inset: auto 0 28px; display: grid; justify-items: center; gap: 12px; color: rgba(255, 255, 255, .85); }
   .hero-cue i { width: 1px; height: 46px; background: linear-gradient(#fff, transparent); animation: cue 2.2s var(--ease-inout) infinite; transform-origin: top; }
   @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-  .hero-veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(120% 90% at 50% 50%, #fff 30%, var(--bg) 70%); }
-  .hero + * { position: relative; z-index: 1; }
 
   /* ---------- the intro ---------- */
   .intro { --r: 0px; position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; background: radial-gradient(circle at 50% 50%, #1B3D5C, #0B1A2A 70%);

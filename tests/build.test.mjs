@@ -70,3 +70,12 @@ test('hero: the name on two lines, a logo intro, nothing else', () => {
   assert.match(hero, /brand-logo\.webp/);
   assert.doesNotMatch(hero, /Mergi cu noi|Clubul românilor care călătoresc|Urcă la bord/);
 });
+
+test('home: destinations loop (a hidden copy for a seamless marquee), no white veil after the hero', () => {
+  const html = page();
+  const track = html.match(/<ul class="dest-track"[\s\S]*?<\/ul>/)[0];
+  assert.match(track, /data-marquee/);
+  assert.equal((track.match(/class="dest-card"/g) || []).length, 14);
+  assert.match(track, /<li[^>]*aria-hidden="true"/);
+  assert.doesNotMatch(html, /class="hero-veil"/);
+});

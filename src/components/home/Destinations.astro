@@ -1,4 +1,7 @@
 ---
+/* Destinations: a panel that rises over the clouds at the end of the hero, with a row of cards that
+   drifts on its own in a loop and eases to a stop while the pointer is over it (src/scripts/marquee.ts).
+   The second set of cards is a hidden copy, so the loop has no seam. */
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -11,11 +14,11 @@ const list = (await getCollection('destinations')).sort((a, b) => a.data.order -
     <p class="lead" data-reveal>Hoteluri de 4–5★ la prețuri de membru, în peste 2.000 de destinații. Iată câteva dintre cele în care comunitatea a fost deja.</p>
   </div>
   <div class="dest-viewport" data-reveal>
-    <ul class="dest-track" data-drag>
-      {list.map((d) => (
-        <li>
-          <a class="dest-card" href={`/destinatii/${d.id}`} draggable="false">
-            <Image src={d.data.image} alt={`${d.data.name}, ${d.data.country}`} widths={[420, 720]} sizes="360px" draggable="false" />
+    <ul class="dest-track" data-marquee>
+      {[0, 1].map((copy) => list.map((d) => (
+        <li aria-hidden={copy ? 'true' : undefined}>
+          <a class="dest-card" href={`/destinatii/${d.id}`} tabindex={copy ? -1 : undefined}>
+            <Image src={d.data.image} alt={copy ? '' : `${d.data.name}, ${d.data.country}`} widths={[420, 720]} sizes="360px" />
             <span class="dest-meta">
               <span class="h3">{d.data.name}</span>
               <span class="dest-country">{d.data.country}</span>
@@ -23,29 +26,27 @@ const list = (await getCollection('destinations')).sort((a, b) => a.data.order -
             </span>
           </a>
         </li>
-      ))}
+      )))}
     </ul>
   </div>
-  <p class="dest-hint label" aria-hidden="true">← Trage →</p>
   <p class="actions"><a class="btn btn-ghost" href="/destinatii">Toate destinațiile</a></p>
 </section>
 
 <style is:global>
+  /* the panel that rides up over the clouds: it starts under the end of the hero's pin */
+  .dest { position: relative; z-index: 1; margin-top: -28vh; padding-top: clamp(72px, 10vh, 110px); border-radius: 32px 32px 0 0; background: var(--bg); box-shadow: 0 -30px 60px rgba(8, 28, 48, .18); }
   .dest .wrap { margin-bottom: 56px; }
-  .dest-viewport { overflow: hidden; padding-inline: max(var(--pad), calc((100vw - 1200px) / 2)); cursor: grab; }
-  .dest-viewport:active { cursor: grabbing; }
-  .dest-track { display: flex; gap: 22px; width: max-content; touch-action: pan-y; }
-  .dest-track .dest-card { width: 360px; user-select: none; }
-  .dest-track .dest-card img { pointer-events: none; }
-  .dest-hint { margin-top: 26px; text-align: center; color: var(--muted); }
-  .dest .actions { margin-top: 18px; }
+  .dest-viewport { overflow: hidden; -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .dest-track { display: flex; gap: 22px; width: max-content; padding-right: 22px; will-change: transform; }
+  .dest-track .dest-card { width: 340px; }
+  .dest .actions { margin-top: 40px; }
 </style>
 
 <script>
   import { onPage, $ } from '../../scripts/motion';
-  import { initDragCarousel } from '../../scripts/drag-carousel';
+  import { initMarquee } from '../../scripts/marquee';
   onPage(() => {
-    const track = $('.dest-track[data-drag]');
-    if (track) return initDragCarousel(track);
+    const track = $('.dest-track[data-marquee]');
+    if (track) return initMarquee(track);
   });
 </script>
