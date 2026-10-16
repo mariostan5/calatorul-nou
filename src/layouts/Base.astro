@@ -1,0 +1,36 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Călătorul Antreprenor · Lumea se vede altfel de la hublou',
+  description = 'Comunitatea românilor care călătoresc mai mult și construiesc, în paralel, ceva al lor. Vacanțe la prețuri de membru, excursii de grup și o academie.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#FAFAF9" />
+    <link rel="icon" href="/brand-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400..700&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <script>
+      import { initMotion } from '../scripts/motion';
+      initMotion();
+    </script>
+  </body>
+</html>
